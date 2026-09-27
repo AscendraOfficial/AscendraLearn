@@ -67,4 +67,34 @@ A place for reading and learning resources, including:
 - Seating plans
 
 **📆 Calendar**
-One place for assignments, tests, events, deadlines, and classroom activity
+One place for assignments, tests, events, deadlines, and classroom activity.
+
+## 🌐 Part of Ascendra
+Ascendra Learn is part of the Ascendra ecosystem.
+
+Ascendra is focused on building useful, simple, and connected tools for productivity, learning, and creativity.
+
+## 🔒 Privacy and Security
+Ascendra Learn is being designed with student privacy in mind.
+
+Student information, private messages, and school data should only be available to authorized users.
+
+## 🛠️ Status
+
+**Early Prototype**
+
+We're currently experimenting with ideas and building the foundations of Ascendra Learn.
+
+More coming soon 👀
+
+
+
+
+
+
+
+
+
+
+
+
