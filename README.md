@@ -56,7 +56,7 @@ A place for reading and learning resources, including:
 - Reading Achievements
 - Teacher-created resources
 
-**📊 Teacher Tools
+**📊 Teacher Tools**
 - Assignment analytics
 - Student Progress
 - Class statistics
