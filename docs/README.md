@@ -79,14 +79,21 @@ Ascendra Learn is being designed with student privacy in mind.
 
 Student information, private messages, and school data should only be available to authorized users.
 
-## 🖥️ Current Browser Prototype
+## 🖥️ Run the App Locally
 
-The [homepage prototype](../index.html) includes student and teacher dashboards, a role-based sign-up screen, classroom join codes, assignments, quizzes, progress summaries, and classroom tools.
+The [homepage](../index.html) is served by a Node.js backend and SQLite database. Accounts, classroom join codes, assignments, quizzes, submissions, and points persist in the local `data/` directory.
 
-Open `index.html` in a browser to try it. This is a front-end demo: sign-up details and classroom changes are not sent to a server or saved between page loads. Demo class codes are `MAPLE-28` and `ORBIT-14`.
+1. Install Node.js 20 or newer.
+2. From the project folder, run `npm install`.
+3. Optionally copy `.env.example` to `.env` to customize local settings.
+4. Run `npm start` and open `http://localhost:3000`.
+
+Students and teachers can sign up directly without an invite code. This means anyone can create a teacher account; only deploy it in a trusted environment until school-controlled registration is added. Teachers create classrooms to generate unique join codes; share those codes with students. Set `SESSION_SECRET` to a strong random value before production deployment and serve the app over HTTPS.
+
+Run the backend tests with `npm test`.
 
 ## 🛠️ Status
 
 **Early Prototype**
 
-The browser prototype demonstrates the planned experience. Real accounts, persistent classroom data, and school integrations still need a backend.
+Authentication and classroom data now use a local SQLite backend. The app still needs a production hosting setup, backups, account recovery, and a school-appropriate privacy review before real student data should be used.

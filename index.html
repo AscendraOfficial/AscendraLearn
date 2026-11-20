@@ -368,7 +368,7 @@
         .teacher-task-modal p { margin: 0 0 16px; color: var(--muted); font-size: 11px; }
         .teacher-task-form { display: grid; gap: 12px; }
         .teacher-task-form label { display: grid; gap: 6px; color: #59576b; font-size: 10px; font-weight: 700; }
-        .teacher-task-form input { width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 9px; outline: 0; padding: 0 11px; font-size: 12px; }
+        .teacher-task-form input, .teacher-task-form select { width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 9px; outline: 0; padding: 0 11px; font: inherit; font-size: 12px; }
         .teacher-task-form input:focus { border-color: #9c83ee; box-shadow: 0 0 0 3px rgb(112 72 232 / 10%); }
         .seating-plan { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 10px 17px 17px; }
         .seat { border: 1px solid #eee8ff; border-radius: 8px; background: #faf8ff; padding: 9px; color: #5d4c87; font-size: 9px; text-align: center; }
@@ -564,6 +564,10 @@
                             <div class="panel-header"><div><h2 class="panel-title" id="student-classes-title">My classrooms</h2><p class="panel-subtitle">Join your teacher's class with a code</p></div><button class="text-link" type="button" data-open-join>＋ Join</button></div>
                             <div class="class-list" id="joined-class-list"><p class="class-empty">No classrooms joined yet. Ask your teacher for a class code to get started.</p></div>
                         </section>
+                        <section class="panel" aria-labelledby="student-quizzes-title">
+                            <div class="panel-header"><div><h2 class="panel-title" id="student-quizzes-title">Classroom quizzes</h2><p class="panel-subtitle">Practice what you're learning in class</p></div></div>
+                            <div class="assignment-list" id="student-quiz-list"><p class="class-empty">Join a classroom to see its quizzes.</p></div>
+                        </section>
                         <section class="panel" aria-labelledby="continue-title">
                             <div class="panel-header">
                                 <div><h2 class="panel-title" id="continue-title">Continue learning</h2><p class="panel-subtitle">Pick up right where you left off</p></div>
@@ -591,9 +595,9 @@
 
                         <section class="panel" aria-labelledby="leaderboard-title">
                             <div class="panel-header"><div><h2 class="panel-title" id="leaderboard-title">Class leaderboard</h2><p class="panel-subtitle">Your classroom this week</p></div><button class="text-link" type="button" data-page="Leaderboard">See all →</button></div>
-                            <div class="leader-row"><span class="rank">1</span><span class="mini-avatar" aria-hidden="true">👩🏽‍🚀</span><span class="leader-name">Ava M.</span><span class="leader-xp">2,980 XP</span></div>
-                            <div class="leader-row"><span class="rank">2</span><span class="mini-avatar" style="background:#e2f4ee" aria-hidden="true">🧑🏼‍🎤</span><span class="leader-name">Noah K.</span><span class="leader-xp">2,710 XP</span></div>
-                            <div class="leader-row"><span class="rank" style="color:var(--purple)">4</span><span class="mini-avatar" style="background:#f9d6c5" aria-hidden="true">🧑🏻‍🎓</span><span class="leader-name">You</span><span class="leader-xp">2,450 XP</span></div>
+                            <div id="student-leaderboard-list">
+                                <div class="leader-row"><span class="rank">1</span><span class="mini-avatar" aria-hidden="true">🏆</span><span class="leader-name">Join a classroom to see your class leaderboard.</span></div>
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -612,21 +616,17 @@
                 </section>
 
                 <section class="stats-grid" aria-label="Classroom overview">
-                    <article class="stat-card"><div class="stat-top"><span>My students</span><span class="stat-icon" aria-hidden="true">👩‍🎓</span></div><div class="stat-value">28</div><div class="stat-foot">Across 2 active classrooms</div></article>
+                    <article class="stat-card"><div class="stat-top"><span>My students</span><span class="stat-icon" aria-hidden="true">👩‍🎓</span></div><div class="stat-value" id="class-student-count">0</div><div class="stat-foot" id="classroom-count-caption">Create a classroom to get started</div></article>
                     <article class="stat-card"><div class="stat-top"><span>Active assignments</span><span class="stat-icon" aria-hidden="true">📚</span></div><div class="stat-value" id="active-assignment-count">6</div><div class="stat-foot">3 due this week</div></article>
                     <article class="stat-card"><div class="stat-top"><span>To review</span><span class="stat-icon" aria-hidden="true">📝</span></div><div class="stat-value" id="to-review-count">12</div><div class="stat-foot">Submissions waiting for a grade</div></article>
-                    <article class="stat-card"><div class="stat-top"><span>Class average</span><span class="stat-icon" aria-hidden="true">📈</span></div><div class="stat-value">80<span style="font-size:14px">%</span></div><div class="stat-foot">Up 4% from last month</div></article>
+                    <article class="stat-card"><div class="stat-top"><span>Class average</span><span class="stat-icon" aria-hidden="true">📈</span></div><div class="stat-value" id="class-average-value">—</div><div class="stat-foot" id="class-average-note">Grade submissions to see class progress</div></article>
                 </section>
 
                 <div class="dashboard-grid">
                     <div class="column">
                         <section class="panel" aria-labelledby="teacher-performance-title">
                             <div class="panel-header"><div><h2 class="panel-title" id="teacher-performance-title">Classroom performance</h2><p class="panel-subtitle">Average progress by subject</p></div><button class="text-link" type="button" data-teacher-action="Student reports">View reports →</button></div>
-                            <div class="performance-list">
-                                <div class="performance-row"><span>Mathematics</span><div class="performance-track"><span style="width:80%"></span></div><strong>80%</strong></div>
-                                <div class="performance-row"><span>Science</span><div class="performance-track"><span style="width:90%"></span></div><strong>90%</strong></div>
-                                <div class="performance-row"><span>English</span><div class="performance-track"><span style="width:70%"></span></div><strong>70%</strong></div>
-                            </div>
+                            <div class="performance-list" id="teacher-performance-list"><p class="class-empty">Graded student work will appear here.</p></div>
                         </section>
 
                         <section class="panel" aria-labelledby="teacher-assignments-title" id="teacher-assignments-panel">
@@ -654,13 +654,10 @@
                     <div class="column">
                         <section class="panel" aria-labelledby="teacher-classroom-title">
                             <div class="panel-header"><div><h2 class="panel-title" id="teacher-classroom-title">My classroom</h2><p class="panel-subtitle">Grade 8 · Room 204</p></div><button class="text-link" type="button" data-teacher-action="Classroom settings">Manage →</button></div>
-                            <div class="class-code"><div><span>Grade 8 · Room 204</span><br><strong>MAPLE-28</strong></div><button class="text-link copy-class-code" type="button" data-code="MAPLE-28">Copy code</button></div>
-                            <div class="class-code-list" id="teacher-class-codes"></div>
+                                            <div class="class-code-list" id="teacher-class-codes"><p class="class-empty" style="padding:0 18px">Create a classroom to get a student join code.</p></div>
                             <div class="panel-header" style="padding-top:0"><span class="panel-subtitle">Give a code to students so they can join your class.</span><button class="teacher-action" id="create-classroom" type="button">＋ New classroom</button></div>
-                            <div class="leader-row"><span class="mini-avatar" aria-hidden="true">👩🏽‍🚀</span><span class="leader-name">Ava M.</span><span class="leader-xp">2,980 XP</span></div>
-                            <div class="leader-row"><span class="mini-avatar" style="background:#e2f4ee" aria-hidden="true">🧑🏼‍🎤</span><span class="leader-name">Noah K.</span><span class="leader-xp">2,710 XP</span></div>
-                            <div class="leader-row"><span class="mini-avatar" style="background:#f9d6c5" aria-hidden="true">🧑🏻‍🎓</span><span class="leader-name">Declan P.</span><span class="leader-xp">2,450 XP</span></div>
-                            <div class="class-points"><span>⭐ <strong id="class-points-total">240</strong> points this week</span><button class="text-link" type="button" data-teacher-action="Award classroom points">+ Award</button></div>
+                            <div id="teacher-student-list"></div>
+                            <div class="class-points"><span>⭐ <strong id="class-points-total">0</strong> classroom points</span><button class="text-link" type="button" data-teacher-action="Award classroom points">+ Award</button></div>
                         </section>
                         <section class="panel" aria-labelledby="teacher-tools-title">
                             <div class="panel-header"><div><h2 class="panel-title" id="teacher-tools-title">Classroom tools</h2><p class="panel-subtitle">Make your next classroom task easier</p></div></div>
@@ -682,9 +679,9 @@
         <div class="join-modal">
             <div class="modal-top"><span>🏫 &nbsp;CLASSROOM</span><button class="close-modal" id="close-join-class" type="button" aria-label="Close join classroom">×</button></div>
             <h2 id="join-class-title">Join a classroom</h2>
-            <p>Enter the class code your teacher shared with you. Demo codes: <strong>MAPLE-28</strong> and <strong>ORBIT-14</strong>.</p>
+            <p>Enter the unique class code your teacher shared with you.</p>
             <form class="join-form" id="join-class-form">
-                <label for="class-code-input">Class code<input id="class-code-input" name="code" placeholder="e.g. MAPLE-28" maxlength="16" autocomplete="off" required></label>
+                <label for="class-code-input">Class code<input id="class-code-input" name="code" placeholder="e.g. G7NP-XM3R" maxlength="16" autocomplete="off" required></label>
                 <p class="join-error" id="join-class-error" aria-live="polite"></p>
                 <button class="signup-submit" type="submit">Join classroom →</button>
             </form>
@@ -701,14 +698,28 @@
             </form>
         </div>
     </div>
+    <div class="modal-backdrop" id="student-quiz-backdrop" role="dialog" aria-modal="true" aria-labelledby="student-quiz-title">
+        <div class="join-modal">
+            <div class="modal-top"><span>📝 &nbsp;CLASSROOM QUIZ</span><button class="close-modal" id="close-student-quiz" type="button" aria-label="Close quiz">×</button></div>
+            <h2 id="student-quiz-title">Quiz</h2>
+            <p id="student-quiz-question"></p>
+            <form class="join-form" id="student-quiz-form">
+                <label for="student-quiz-answer">Your answer<input id="student-quiz-answer" name="answer" maxlength="80" autocomplete="off" required></label>
+                <p class="join-error" id="student-quiz-feedback" aria-live="polite"></p>
+                <button class="signup-submit" type="submit">Submit answer →</button>
+            </form>
+        </div>
+    </div>
     <div class="modal-backdrop" id="teacher-task-backdrop" role="dialog" aria-modal="true" aria-labelledby="teacher-task-title">
         <div class="teacher-task-modal">
             <div class="modal-top"><span id="teacher-task-eyebrow">📚 &nbsp;TEACHER TOOLS</span><button class="close-modal" id="close-teacher-task" type="button" aria-label="Close">×</button></div>
             <h2 id="teacher-task-title">Create classroom work</h2>
             <p id="teacher-task-description">Add learning work for your classroom.</p>
             <form class="teacher-task-form" id="teacher-task-form">
+                <label id="teacher-class-select-field" for="teacher-class-select" hidden>Classroom<select id="teacher-class-select" name="classroom"></select></label>
                 <label for="teacher-task-name"><span id="teacher-task-name-label">Title</span><input id="teacher-task-name" name="name" maxlength="80" required></label>
                 <label id="teacher-task-question-field" for="teacher-task-question" hidden>Quiz question<input id="teacher-task-question" name="question" maxlength="160"></label>
+                <label id="teacher-task-answer-field" for="teacher-task-answer" hidden>Correct answer<input id="teacher-task-answer" name="answer" maxlength="80"></label>
                 <label id="teacher-task-subject-field" for="teacher-task-subject">Subject<input id="teacher-task-subject" name="subject" maxlength="40" placeholder="e.g. Mathematics"></label>
                 <button class="signup-submit" type="submit" id="teacher-task-submit">Create</button>
             </form>
@@ -720,16 +731,18 @@
             <h2 id="signup-title">Create your free account</h2>
             <p class="signup-intro">First, tell us how you'll use Ascendra Learn. We'll set up the right dashboard for you.</p>
             <form class="signup-form" id="signup-form">
-                <div class="role-options" role="radiogroup" aria-label="I am signing up as a">
+                <div class="role-options" id="auth-role-options" role="radiogroup" aria-label="I am signing up as a">
                     <div class="role-option"><input id="role-student" name="role" type="radio" value="student" checked><label for="role-student"><strong>I'm a student</strong><span>Learn, play, and track progress</span></label></div>
                     <div class="role-option teacher"><input id="role-teacher" name="role" type="radio" value="teacher"><label for="role-teacher"><strong>I'm a teacher</strong><span>Manage a classroom and support learners</span></label></div>
                 </div>
                 <label class="signup-field">Your name<input id="signup-name" name="name" type="text" placeholder="e.g. Alex Parker" autocomplete="name" required></label>
                 <label class="signup-field">Email address<input name="email" type="email" placeholder="you@school.edu" autocomplete="email" required></label>
-                <label class="signup-field">Create a password<input name="password" type="password" placeholder="At least 8 characters" minlength="8" autocomplete="new-password" required></label>
-                <button class="signup-submit" type="submit">Create my account →</button>
-                <p class="signup-fineprint">This is a local demo. Your details aren't sent to a server or saved.</p>
+                <label class="signup-field" id="password-field">Create a password<input name="password" type="password" placeholder="At least 10 characters" minlength="10" maxlength="128" autocomplete="new-password" required></label>
+                <button class="signup-submit" type="submit" id="auth-submit">Create my account →</button>
             </form>
+            <button class="text-link" id="toggle-auth-mode" type="button">Already have an account? Sign in</button>
+            <p class="signup-fineprint" id="auth-status" aria-live="polite"></p>
+            <p class="signup-fineprint">Your password is securely hashed. Account and classroom data are stored on this server.</p>
         </div>
     </div>
     <div class="modal-backdrop" id="quiz-backdrop" role="dialog" aria-modal="true" aria-labelledby="quiz-title">
@@ -753,6 +766,366 @@
             toast.classList.add("show");
             window.clearTimeout(toastTimer);
             toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2800);
+        }
+
+        let csrfToken = "";
+        let currentUser = null;
+        let dashboardData = null;
+        let activeQuizId = null;
+
+        async function apiRequest(url, options = {}) {
+            const method = (options.method || "GET").toUpperCase();
+            const headers = new Headers(options.headers || {});
+            if (options.body !== undefined) headers.set("Content-Type", "application/json");
+            if (!["GET", "HEAD", "OPTIONS"].includes(method)) {
+                if (!csrfToken) {
+                    const tokenResponse = await fetch("/api/csrf-token", { credentials: "same-origin" });
+                    if (!tokenResponse.ok) throw new Error("The server is unavailable. Start it with npm start and try again.");
+                    csrfToken = (await tokenResponse.json()).csrfToken;
+                }
+                headers.set("X-CSRF-Token", csrfToken);
+            }
+            const response = await fetch(url, {
+                ...options,
+                method,
+                headers,
+                credentials: "same-origin",
+                body: options.body === undefined ? undefined : JSON.stringify(options.body)
+            });
+            if (response.status === 204) return null;
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(payload.error || "The request couldn't be completed.");
+            if (payload.csrfToken) csrfToken = payload.csrfToken;
+            return payload;
+        }
+
+        function emptyMessage(container, message) {
+            const empty = document.createElement("p");
+            empty.className = "class-empty";
+            empty.textContent = message;
+            container.replaceChildren(empty);
+        }
+
+        function renderTeacherClasses(classrooms) {
+            const list = document.getElementById("teacher-class-codes");
+            list.replaceChildren();
+            if (classrooms.length === 0) {
+                emptyMessage(list, "Create a classroom to get a student join code.");
+            }
+            classrooms.forEach((classroom) => {
+                const row = document.createElement("div");
+                row.className = "class-code";
+                const details = document.createElement("div");
+                const name = document.createElement("span");
+                name.textContent = classroom.name;
+                const code = document.createElement("strong");
+                code.textContent = classroom.joinCode;
+                details.append(name, document.createElement("br"), code);
+                const copy = document.createElement("button");
+                copy.className = "text-link";
+                copy.type = "button";
+                copy.textContent = "Copy code";
+                copy.addEventListener("click", () => copyClassCode(classroom.joinCode));
+                row.append(details, copy);
+                list.append(row);
+            });
+
+            const select = document.getElementById("teacher-class-select");
+            select.replaceChildren();
+            classrooms.forEach((classroom) => {
+                const option = document.createElement("option");
+                option.value = classroom.id;
+                option.textContent = classroom.name;
+                select.append(option);
+            });
+            document.getElementById("teacher-class-select-field").hidden = classrooms.length === 0;
+            document.querySelectorAll('[data-teacher-action="Create assignment"], [data-teacher-action="Create quiz"]')
+                .forEach((button) => { button.disabled = classrooms.length === 0; });
+        }
+
+        function renderStudentClasses(classrooms) {
+            const list = document.getElementById("joined-class-list");
+            list.replaceChildren();
+            if (classrooms.length === 0) {
+                emptyMessage(list, "No classrooms joined yet. Ask your teacher for a class code to get started.");
+                return;
+            }
+            classrooms.forEach((classroom) => {
+                const row = document.createElement("div");
+                row.className = "joined-class";
+                const icon = document.createElement("span");
+                icon.className = "joined-class-icon";
+                icon.setAttribute("aria-hidden", "true");
+                icon.textContent = "🏫";
+                const details = document.createElement("div");
+                const title = document.createElement("strong");
+                title.textContent = classroom.name;
+                const teacher = document.createElement("span");
+                teacher.textContent = `${classroom.teacherName} · ${classroom.joinCode}`;
+                details.append(title, teacher);
+                row.append(icon, details);
+                list.append(row);
+            });
+        }
+
+        function renderAssignments(assignments, isTeacher) {
+            const list = document.getElementById(isTeacher ? "teacher-assignment-list" : "assignment-list");
+            list.replaceChildren();
+            if (assignments.length === 0) {
+                emptyMessage(list, isTeacher ? "No assignments yet. Create one for your classroom." : "Your classroom assignments will show up here.");
+                return;
+            }
+            assignments.forEach((assignment) => {
+                const row = document.createElement("article");
+                row.className = isTeacher ? "teacher-assignment" : "assignment";
+                if (!isTeacher) {
+                    row.classList.add("data-search");
+                    row.dataset.search = `${assignment.title} ${assignment.subject} ${assignment.classroomName}`.toLowerCase();
+                }
+                const icon = document.createElement("div");
+                icon.className = "subject-icon";
+                icon.textContent = assignment.subject ? "📚" : "📝";
+                const details = document.createElement("div");
+                details.className = "assignment-info";
+                const title = document.createElement("strong");
+                title.textContent = assignment.title;
+                const subtitle = document.createElement("span");
+                subtitle.textContent = isTeacher
+                    ? `${assignment.classroomName} · ${assignment.subject}`
+                    : `${assignment.classroomName} · ${assignment.subject}`;
+                details.append(title, subtitle);
+                row.append(icon, details);
+                if (isTeacher) {
+                    const count = document.createElement("span");
+                    count.className = "due";
+                    count.textContent = `${assignment.submissionCount} submitted`;
+                    row.append(count);
+                } else {
+                    const action = document.createElement("button");
+                    action.className = "teacher-action";
+                    action.type = "button";
+                    action.textContent = assignment.grade !== null && assignment.grade !== undefined
+                        ? `Graded · ${assignment.grade}%`
+                        : assignment.submissionStatus ? "Submitted ✓" : "Mark done";
+                    action.disabled = Boolean(assignment.submissionStatus);
+                    action.addEventListener("click", async () => {
+                        try {
+                            await apiRequest(`/api/assignments/${assignment.id}/submit`, { method: "POST", body: {} });
+                            await refreshDashboard();
+                            showToast("Assignment submitted. Nice work!");
+                        } catch (error) {
+                            showToast(error.message);
+                        }
+                    });
+                    row.append(action);
+                }
+                list.append(row);
+            });
+            if (isTeacher) document.getElementById("active-assignment-count").textContent = String(assignments.length);
+        }
+
+        function renderQuizzes(quizzes, isTeacher) {
+            const list = document.getElementById(isTeacher ? "teacher-quiz-list" : "student-quiz-list");
+            list.replaceChildren();
+            if (quizzes.length === 0) {
+                emptyMessage(list, isTeacher ? "No quizzes created yet." : "Join a classroom to see its quizzes.");
+                return;
+            }
+            quizzes.forEach((quiz) => {
+                const row = document.createElement("article");
+                row.className = "teacher-assignment";
+                const icon = document.createElement("div");
+                icon.className = "subject-icon science";
+                icon.textContent = "📝";
+                const details = document.createElement("div");
+                details.className = "assignment-info";
+                const title = document.createElement("strong");
+                title.textContent = quiz.title;
+                const description = document.createElement("span");
+                description.textContent = isTeacher ? `${quiz.classroomName} · ${quiz.question}` : quiz.question;
+                details.append(title, description);
+                row.append(icon, details);
+                if (!isTeacher) {
+                    const action = document.createElement("button");
+                    action.className = "teacher-action";
+                    action.type = "button";
+                    action.textContent = quiz.isCorrect === null ? "Take quiz" : quiz.isCorrect ? "Correct ✓" : "Answered";
+                    action.disabled = quiz.isCorrect !== null;
+                    action.addEventListener("click", () => openStudentQuiz(quiz));
+                    row.append(action);
+                }
+                list.append(row);
+            });
+        }
+
+        function renderTeacherStudents(students) {
+            const list = document.getElementById("teacher-student-list");
+            list.replaceChildren();
+            if (students.length === 0) {
+                const empty = document.createElement("p");
+                empty.className = "class-empty";
+                empty.style.padding = "0 18px 12px";
+                empty.textContent = "Students who join your classroom will appear here.";
+                list.append(empty);
+                return;
+            }
+            students.forEach((student) => {
+                const row = document.createElement("div");
+                row.className = "leader-row";
+                const name = document.createElement("span");
+                name.className = "leader-name";
+                name.textContent = student.name;
+                const email = document.createElement("span");
+                email.className = "leader-xp";
+                email.textContent = student.email;
+                row.append(name, email);
+                list.append(row);
+            });
+        }
+
+        function renderStudentLeaderboard(leaderboard) {
+            const list = document.getElementById("student-leaderboard-list");
+            list.replaceChildren();
+            if (leaderboard.length === 0) {
+                emptyMessage(list, "Join a classroom to see your class leaderboard.");
+                return;
+            }
+            const currentRank = leaderboard.findIndex((student) => student.id === currentUser.id);
+            leaderboard.forEach((student, index) => {
+                const row = document.createElement("div");
+                row.className = "leader-row";
+                const rank = document.createElement("span");
+                rank.className = "rank";
+                rank.textContent = String(index + 1);
+                const name = document.createElement("span");
+                name.className = "leader-name";
+                name.textContent = student.id === currentUser.id ? "You" : student.name;
+                const points = document.createElement("span");
+                points.className = "leader-xp";
+                points.textContent = `${student.points} points`;
+                row.append(rank, name, points);
+                list.append(row);
+            });
+            const rankValue = document.querySelector(".stats-grid .stat-card:nth-child(4) .stat-value");
+            rankValue.textContent = currentRank >= 0 ? `#${currentRank + 1}` : "—";
+        }
+
+        function renderSubmissions(submissions) {
+            const list = document.getElementById("submission-list");
+            list.replaceChildren();
+            if (submissions.length === 0) {
+                emptyMessage(list, "No submissions are waiting for a grade.");
+            }
+            submissions.forEach((submission) => {
+                const row = document.createElement("article");
+                row.className = "teacher-assignment";
+                const details = document.createElement("div");
+                details.className = "assignment-info";
+                const title = document.createElement("strong");
+                title.textContent = submission.assignmentTitle;
+                const student = document.createElement("span");
+                student.textContent = `${submission.studentName} · ${submission.classroomName}`;
+                const grade = document.createElement("button");
+                grade.className = "teacher-action";
+                grade.type = "button";
+                grade.textContent = "Grade";
+                grade.addEventListener("click", async () => {
+                    try {
+                        await apiRequest(`/api/submissions/${submission.id}/grade`, { method: "POST", body: { grade: 100 } });
+                        await refreshDashboard();
+                        showToast("Submission graded: 100%.");
+                    } catch (error) {
+                        showToast(error.message);
+                    }
+                });
+                details.append(title, student);
+                row.append(details, grade);
+                list.append(row);
+            });
+            document.getElementById("to-review-count").textContent = String(submissions.length);
+        }
+
+        function renderTeacherPerformance(performance, classAverage) {
+            const list = document.getElementById("teacher-performance-list");
+            list.replaceChildren();
+            if (performance.length === 0) {
+                emptyMessage(list, "Graded student work will appear here.");
+            }
+            performance.forEach((subject) => {
+                const row = document.createElement("div");
+                row.className = "performance-row";
+                const name = document.createElement("span");
+                name.textContent = subject.subject;
+                const track = document.createElement("div");
+                track.className = "performance-track";
+                const fill = document.createElement("span");
+                fill.style.width = `${Math.max(0, Math.min(100, subject.averageGrade))}%`;
+                track.append(fill);
+                const grade = document.createElement("strong");
+                grade.textContent = `${subject.averageGrade}%`;
+                row.append(name, track, grade);
+                list.append(row);
+            });
+            document.getElementById("class-average-value").textContent =
+                classAverage === null ? "—" : `${classAverage}%`;
+            document.getElementById("class-average-note").textContent = classAverage === null
+                ? "Grade submissions to see class progress"
+                : "Average across graded assignments";
+        }
+
+        async function refreshDashboard() {
+            dashboardData = await apiRequest("/api/dashboard");
+            currentUser = dashboardData.user;
+            setDashboardRole(currentUser.role, currentUser.name);
+            const isTeacher = currentUser.role === "teacher";
+            document.getElementById("xp-total").textContent = Number(dashboardData.points).toLocaleString("en-US");
+            if (isTeacher) {
+                renderTeacherClasses(dashboardData.classrooms);
+                renderAssignments(dashboardData.assignments, true);
+                renderQuizzes(dashboardData.quizzes, true);
+                renderSubmissions(dashboardData.submissions);
+                renderTeacherStudents(dashboardData.students);
+                renderTeacherPerformance(dashboardData.performance, dashboardData.classAverage);
+                document.getElementById("class-student-count").textContent =
+                    String(new Set(dashboardData.students.map((student) => student.id)).size);
+                document.getElementById("classroom-count-caption").textContent =
+                    `Across ${dashboardData.classrooms.length} active classroom${dashboardData.classrooms.length === 1 ? "" : "s"}`;
+                const pointTotal = dashboardData.classPoints.reduce((total, item) => total + item.total, 0);
+                document.getElementById("class-points-total").textContent = String(pointTotal);
+            } else {
+                renderStudentClasses(dashboardData.classrooms);
+                renderAssignments(dashboardData.assignments, false);
+                renderQuizzes(dashboardData.quizzes, false);
+                renderStudentLeaderboard(dashboardData.leaderboard);
+            }
+        }
+
+        async function copyClassCode(code) {
+            try {
+                await navigator.clipboard.writeText(code);
+                showToast(`Class code ${code} copied.`);
+            } catch {
+                showToast(`Share this class code with students: ${code}`);
+            }
+        }
+
+        async function initializeBackend() {
+            try {
+                const result = await apiRequest("/api/me");
+                currentUser = result.user;
+                await refreshDashboard();
+                document.getElementById("open-signup").textContent = "Sign out";
+                document.getElementById("switch-dashboard").hidden = false;
+            } catch (error) {
+                if (!error.message.startsWith("Please sign in")) {
+                    showToast(error.message);
+                } else {
+                    setAuthMode("signup");
+                    signupBackdrop.classList.add("open");
+                }
+                document.getElementById("switch-dashboard").hidden = true;
+                document.getElementById("open-signup").textContent = "Sign up";
+            }
         }
 
         function navigateStudentPage(page) {
@@ -805,14 +1178,16 @@
             document.getElementById("teacher-name").textContent = name;
             document.getElementById("welcome-title").firstChild.textContent = `Good morning, ${firstName} `;
             document.title = `${isTeacher ? "Teacher dashboard" : "Home"} | Ascendra Learn`;
+            document.getElementById("open-signup").textContent = "Sign out";
+            document.getElementById("switch-dashboard").hidden = false;
             document.querySelectorAll("#student-navigation .nav-item").forEach((item) => {
                 item.classList.toggle("active", item.dataset.page === "Home");
             });
             document.querySelectorAll("#teacher-navigation .nav-item").forEach((item) => {
                 item.classList.toggle("active", item.dataset.teacherPage === "dashboard");
             });
-            document.getElementById("switch-dashboard").setAttribute("aria-label", isTeacher ? "Switch to student dashboard" : "Switch to teacher dashboard");
-            document.getElementById("switch-dashboard").title = isTeacher ? "Switch to student dashboard" : "Switch to teacher dashboard";
+            document.getElementById("switch-dashboard").setAttribute("aria-label", "Sign out");
+            document.getElementById("switch-dashboard").title = "Sign out";
         }
 
         document.querySelectorAll("[data-teacher-page]").forEach((button) => {
@@ -823,6 +1198,10 @@
         });
         function openTeacherTask(type) {
             const isQuiz = type === "quiz";
+            if (!dashboardData?.classrooms.length) {
+                showToast("Create a classroom before adding assignments or quizzes.");
+                return;
+            }
             const form = document.getElementById("teacher-task-form");
             form.reset();
             document.getElementById("teacher-task-title").textContent = isQuiz ? "Create a quiz" : "Create an assignment";
@@ -832,6 +1211,8 @@
             document.getElementById("teacher-task-name-label").textContent = isQuiz ? "Quiz title" : "Assignment title";
             document.getElementById("teacher-task-question-field").hidden = !isQuiz;
             document.getElementById("teacher-task-question").required = isQuiz;
+            document.getElementById("teacher-task-answer-field").hidden = !isQuiz;
+            document.getElementById("teacher-task-answer").required = isQuiz;
             document.getElementById("teacher-task-subject-field").hidden = isQuiz;
             document.getElementById("teacher-task-submit").textContent = isQuiz ? "Create quiz" : "Create assignment";
             form.dataset.type = type;
@@ -839,34 +1220,12 @@
             window.setTimeout(() => document.getElementById("teacher-task-name").focus(), 0);
         }
 
-        function createTeacherWork(type, name, subject, question) {
-            const isQuiz = type === "quiz";
-            const list = document.getElementById(isQuiz ? "teacher-quiz-list" : "teacher-assignment-list");
-            list.querySelector(".class-empty")?.remove();
-            const row = document.createElement("article");
-            row.className = "teacher-assignment";
-            const icon = document.createElement("div");
-            icon.className = `subject-icon${isQuiz ? " science" : ""}`;
-            icon.setAttribute("aria-hidden", "true");
-            icon.textContent = isQuiz ? "📝" : "📚";
-            const details = document.createElement("div");
-            details.className = "assignment-info";
-            const title = document.createElement("strong");
-            title.textContent = name;
-            const description = document.createElement("span");
-            description.textContent = isQuiz ? question : `${subject} · Just created`;
-            details.append(title, description);
-            row.append(icon, details);
-            list.append(row);
-            if (!isQuiz) {
-                const count = document.getElementById("active-assignment-count");
-                count.textContent = String(Number(count.textContent) + 1);
-            }
-            showToast(`${isQuiz ? "Quiz" : "Assignment"} "${name}" created.`);
-        }
-
         function generateSeatingPlan() {
-            const students = ["Ava M.", "Noah K.", "Declan P.", "Olivia R.", "Mateo L.", "Amara J."];
+            const students = dashboardData?.students || [];
+            if (students.length === 0) {
+                showToast("Students need to join your classroom before generating a seating plan.");
+                return;
+            }
             for (let index = students.length - 1; index > 0; index -= 1) {
                 const swapIndex = Math.floor(Math.random() * (index + 1));
                 [students[index], students[swapIndex]] = [students[swapIndex], students[index]];
@@ -876,22 +1235,31 @@
             students.forEach((student, index) => {
                 const seat = document.createElement("div");
                 seat.className = "seat";
-                seat.textContent = `Table ${Math.floor(index / 2) + 1} · ${student}`;
+                seat.textContent = `Table ${Math.floor(index / 2) + 1} · ${student.name}`;
                 plan.append(seat);
             });
             plan.hidden = false;
             plan.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            showToast("A seating plan for 6 students is ready to review.");
+            showToast(`A seating plan for ${students.length} students is ready to review.`);
         }
 
         function exportStudentReport() {
+            const students = dashboardData?.students || [];
+            if (students.length === 0) {
+                showToast("Students need to join your classroom before a report is available.");
+                return;
+            }
             const rows = [
-                ["Student", "Subject", "Progress", "XP"],
-                ["Ava M.", "Mathematics", "92%", "2980"],
-                ["Noah K.", "Science", "87%", "2710"],
-                ["Declan P.", "English", "80%", "2450"]
+                ["Student", "Classroom", "Points"]
             ];
-            const csv = rows.map((row) => row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")).join("\r\n");
+            students.forEach((student) => {
+                const classroom = dashboardData.classrooms.find((item) => item.id === student.classroomId);
+                rows.push([student.name, classroom?.name || "", String(student.points)]);
+            });
+            const csv = rows.map((row) => row.map((cell) => {
+                const safeCell = /^[=+\-@]/.test(cell) ? `'${cell}` : cell;
+                return `"${safeCell.replace(/"/g, '""')}"`;
+            }).join(",")).join("\r\n");
             const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
             const link = document.createElement("a");
             link.href = url;
@@ -911,17 +1279,11 @@
             } else if (action === "Generate seating plan") {
                 generateSeatingPlan();
             } else if (action === "Award classroom points") {
-                const total = document.getElementById("class-points-total");
-                total.textContent = String(Number(total.textContent) + 10);
-                showToast("10 classroom points awarded! ⭐");
+                awardClassroomPoints();
             } else if (action === "Export student reports") {
                 exportStudentReport();
             } else if (action.startsWith("Review ")) {
-                button.textContent = "Graded ✓";
-                button.disabled = true;
-                const count = document.getElementById("to-review-count");
-                count.textContent = String(Math.max(0, Number(count.textContent) - 1));
-                showToast("Submission marked as graded.");
+                button.scrollIntoView({ behavior: "smooth", block: "nearest" });
             } else {
                 const targets = {
                     "My classroom": "#teacher-classroom-title",
@@ -952,40 +1314,21 @@
             const name = document.getElementById("teacher-task-name").value.trim();
             const subject = document.getElementById("teacher-task-subject").value.trim() || "Classroom";
             const question = document.getElementById("teacher-task-question").value.trim();
-            if (!name || (form.dataset.type === "quiz" && !question)) return;
-            createTeacherWork(form.dataset.type, name, subject, question);
-            document.getElementById("teacher-task-backdrop").classList.remove("open");
+            const answer = document.getElementById("teacher-task-answer").value.trim();
+            const classroomId = Number(document.getElementById("teacher-class-select").value);
+            if (!name || !classroomId || (form.dataset.type === "quiz" && (!question || !answer))) return;
+            const body = form.dataset.type === "quiz"
+                ? { classroomId, title: name, question, correctAnswer: answer }
+                : { classroomId, title: name, subject };
+            const endpoint = form.dataset.type === "quiz" ? "/api/quizzes" : "/api/assignments";
+            apiRequest(endpoint, { method: "POST", body })
+                .then(async () => {
+                    document.getElementById("teacher-task-backdrop").classList.remove("open");
+                    await refreshDashboard();
+                    showToast(`${form.dataset.type === "quiz" ? "Quiz" : "Assignment"} "${name}" created.`);
+                })
+                .catch((error) => showToast(error.message));
         });
-        const classroomCodes = new Map([
-            ["MAPLE-28", { name: "Grade 8 Math", teacher: "Ms. Parker" }],
-            ["ORBIT-14", { name: "Science Lab", teacher: "Mr. Thompson" }]
-        ]);
-        const joinedClassrooms = new Set();
-        function renderJoinedClassrooms() {
-            const list = document.getElementById("joined-class-list");
-            list.replaceChildren();
-            if (joinedClassrooms.size === 0) {
-                const empty = document.createElement("p");
-                empty.className = "class-empty";
-                empty.textContent = "No classrooms joined yet. Ask your teacher for a class code to get started.";
-                list.append(empty);
-                return;
-            }
-            joinedClassrooms.forEach((code) => {
-                const classroom = classroomCodes.get(code);
-                const row = document.createElement("div");
-                row.className = "joined-class";
-                row.innerHTML = '<span class="joined-class-icon" aria-hidden="true">🏫</span><div></div>';
-                const details = row.querySelector("div");
-                const title = document.createElement("strong");
-                title.textContent = classroom.name;
-                const teacher = document.createElement("span");
-                teacher.textContent = `${classroom.teacher} · ${code}`;
-                details.append(title, teacher);
-                list.append(row);
-            });
-        }
-
         const joinClassBackdrop = document.getElementById("join-class-backdrop");
         function openJoinClass() {
             document.getElementById("join-class-error").textContent = "";
@@ -999,66 +1342,19 @@
         });
         document.getElementById("join-class-form").addEventListener("submit", (event) => {
             event.preventDefault();
+            const form = event.currentTarget;
             const code = document.getElementById("class-code-input").value.trim().toUpperCase();
-            const classroom = classroomCodes.get(code);
-            if (!classroom) {
-                document.getElementById("join-class-error").textContent = "We couldn't find that class code. Check it with your teacher and try again.";
-                return;
-            }
-            if (joinedClassrooms.has(code)) {
-                document.getElementById("join-class-error").textContent = "You've already joined this classroom.";
-                return;
-            }
-            joinedClassrooms.add(code);
-            renderJoinedClassrooms();
-            joinClassBackdrop.classList.remove("open");
-            event.currentTarget.reset();
-            showToast(`You joined ${classroom.name}!`);
-        });
-
-        document.querySelectorAll(".copy-class-code").forEach((button) => {
-            button.addEventListener("click", async () => {
-                const code = button.dataset.code;
-                try {
-                    await navigator.clipboard.writeText(code);
-                    showToast(`Class code ${code} copied.`);
-                } catch {
-                    showToast(`Share this class code with students: ${code}`);
-                }
-            });
+            apiRequest("/api/classrooms/join", { method: "POST", body: { code } })
+                .then(async ({ classroom }) => {
+                    joinClassBackdrop.classList.remove("open");
+                    form.reset();
+                    await refreshDashboard();
+                    showToast(`You joined ${classroom.name}!`);
+                })
+                .catch((error) => { document.getElementById("join-class-error").textContent = error.message; });
         });
         function createClassroom(classroomName) {
-            let code;
-            do {
-                const suffix = Math.random().toString(36).slice(2, 6).toUpperCase().padEnd(4, "0");
-                code = `CLASS-${suffix}`;
-            } while (classroomCodes.has(code));
-            classroomCodes.set(code, { name: classroomName, teacher: document.getElementById("profile-name").textContent });
-            const row = document.createElement("div");
-            row.className = "class-code";
-            const details = document.createElement("div");
-            const label = document.createElement("span");
-            label.textContent = classroomName;
-            const codeLabel = document.createElement("strong");
-            codeLabel.textContent = code;
-            const lineBreak = document.createElement("br");
-            details.append(label, lineBreak, codeLabel);
-            const copy = document.createElement("button");
-            copy.className = "text-link copy-class-code";
-            copy.type = "button";
-            copy.dataset.code = code;
-            copy.textContent = "Copy code";
-            copy.addEventListener("click", async () => {
-                try {
-                    await navigator.clipboard.writeText(code);
-                    showToast(`Class code ${code} copied.`);
-                } catch {
-                    showToast(`Share this class code with students: ${code}`);
-                }
-            });
-            row.append(details, copy);
-            document.getElementById("teacher-class-codes").append(row);
-            showToast(`${classroomName} created. Student join code: ${code}`);
+            return apiRequest("/api/classrooms", { method: "POST", body: { name: classroomName } });
         }
         const createClassBackdrop = document.getElementById("create-class-backdrop");
         document.getElementById("create-classroom").addEventListener("click", () => {
@@ -1072,33 +1368,144 @@
         });
         document.getElementById("create-class-form").addEventListener("submit", (event) => {
             event.preventDefault();
+            const form = event.currentTarget;
             const name = document.getElementById("new-class-name").value.trim();
             if (!name) return;
-            createClassroom(name);
-            createClassBackdrop.classList.remove("open");
+            createClassroom(name)
+                .then(async ({ classroom }) => {
+                    createClassBackdrop.classList.remove("open");
+                    form.reset();
+                    await refreshDashboard();
+                    showToast(`${classroom.name} created. Student join code: ${classroom.joinCode}`);
+                })
+                .catch((error) => showToast(error.message));
         });
 
+        const studentQuizBackdrop = document.getElementById("student-quiz-backdrop");
+        function openStudentQuiz(quiz) {
+            activeQuizId = quiz.id;
+            document.getElementById("student-quiz-title").textContent = quiz.title;
+            document.getElementById("student-quiz-question").textContent = quiz.question;
+            document.getElementById("student-quiz-feedback").textContent = "";
+            document.getElementById("student-quiz-answer").value = "";
+            studentQuizBackdrop.classList.add("open");
+            window.setTimeout(() => document.getElementById("student-quiz-answer").focus(), 0);
+        }
+        document.getElementById("close-student-quiz").addEventListener("click", () => studentQuizBackdrop.classList.remove("open"));
+        studentQuizBackdrop.addEventListener("click", (event) => {
+            if (event.target === studentQuizBackdrop) studentQuizBackdrop.classList.remove("open");
+        });
+        document.getElementById("student-quiz-form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const answer = document.getElementById("student-quiz-answer").value.trim();
+            apiRequest(`/api/quizzes/${activeQuizId}/attempt`, { method: "POST", body: { answer } })
+                .then(async (result) => {
+                    document.getElementById("student-quiz-feedback").textContent = result.correct
+                        ? "That's right! You earned 25 points. ⭐"
+                        : "Answer submitted. Ask your teacher if you need a hint.";
+                    await refreshDashboard();
+                })
+                .catch((error) => { document.getElementById("student-quiz-feedback").textContent = error.message; });
+        });
+
+        async function awardClassroomPoints() {
+            const classroom = dashboardData?.classrooms[0];
+            if (!classroom) {
+                showToast("Create a classroom before awarding points.");
+                return;
+            }
+            try {
+                const result = await apiRequest(`/api/classrooms/${classroom.id}/points`, {
+                    method: "POST",
+                    body: { amount: 10 }
+                });
+                await refreshDashboard();
+                showToast(`10 points awarded to ${result.studentsAwarded} students! ⭐`);
+            } catch (error) {
+                showToast(error.message);
+            }
+        }
+
         const signupBackdrop = document.getElementById("signup-backdrop");
-        document.getElementById("open-signup").addEventListener("click", () => signupBackdrop.classList.add("open"));
+        let authMode = "signup";
+        function setAuthMode(mode) {
+            authMode = mode;
+            const signingIn = mode === "login";
+            document.getElementById("signup-title").textContent = signingIn ? "Welcome back" : "Create your free account";
+            document.querySelector(".signup-intro").textContent = signingIn
+                ? "Sign in to pick up where you left off."
+                : "First, tell us how you'll use Ascendra Learn. We'll set up the right dashboard for you.";
+            document.getElementById("signup-name").closest(".signup-field").hidden = signingIn;
+            document.getElementById("signup-name").required = !signingIn;
+            document.getElementById("auth-role-options").hidden = signingIn;
+            document.getElementById("auth-submit").textContent = signingIn ? "Sign in →" : "Create my account →";
+            document.getElementById("toggle-auth-mode").textContent = signingIn
+                ? "New to Ascendra Learn? Create an account"
+                : "Already have an account? Sign in";
+            document.getElementById("auth-status").textContent = "";
+            document.getElementById("signup-form").reset();
+            document.getElementById("role-student").checked = true;
+            document.getElementById("password-field").firstChild.textContent = signingIn ? "Password" : "Create a password";
+            document.querySelector('input[name="password"]').autocomplete = signingIn ? "current-password" : "new-password";
+        }
+        document.getElementById("toggle-auth-mode").addEventListener("click", () => setAuthMode(authMode === "signup" ? "login" : "signup"));
+        document.getElementById("open-signup").addEventListener("click", async () => {
+            if (currentUser) {
+                try {
+                    await apiRequest("/api/auth/logout", { method: "POST", body: {} });
+                    csrfToken = "";
+                    currentUser = null;
+                    dashboardData = null;
+                    document.getElementById("open-signup").textContent = "Sign up";
+                    document.getElementById("switch-dashboard").hidden = true;
+                    setAuthMode("login");
+                    signupBackdrop.classList.add("open");
+                } catch (error) {
+                    showToast(error.message);
+                }
+                return;
+            }
+            setAuthMode("signup");
+            signupBackdrop.classList.add("open");
+        });
         document.getElementById("close-signup").addEventListener("click", () => signupBackdrop.classList.remove("open"));
         signupBackdrop.addEventListener("click", (event) => {
             if (event.target === signupBackdrop) signupBackdrop.classList.remove("open");
         });
-        document.getElementById("signup-form").addEventListener("submit", (event) => {
+        document.getElementById("signup-form").addEventListener("submit", async (event) => {
             event.preventDefault();
-            if (!event.currentTarget.reportValidity()) return;
-            const formData = new FormData(event.currentTarget);
-            const name = String(formData.get("name")).trim();
-            const role = String(formData.get("role"));
-            setDashboardRole(role, name);
-            signupBackdrop.classList.remove("open");
-            showToast(role === "teacher" ? "Welcome! Your teacher dashboard is ready." : "Welcome! Your student dashboard is ready.");
-            event.currentTarget.reset();
-            document.getElementById("role-student").checked = true;
+            const form = event.currentTarget;
+            if (!form.reportValidity()) return;
+            const role = document.querySelector('input[name="role"]:checked').value;
+            const formData = new FormData(form);
+            const payload = {
+                email: String(formData.get("email")).trim(),
+                password: String(formData.get("password"))
+            };
+            const endpoint = authMode === "login" ? "/api/auth/login" : "/api/auth/signup";
+            const wasSigningIn = authMode === "login";
+            if (authMode === "signup") {
+                payload.name = String(formData.get("name")).trim();
+                payload.role = role;
+            }
+            document.getElementById("auth-submit").disabled = true;
+            document.getElementById("auth-status").textContent = "";
+            try {
+                const result = await apiRequest(endpoint, { method: "POST", body: payload });
+                currentUser = result.user;
+                signupBackdrop.classList.remove("open");
+                form.reset();
+                setAuthMode("signup");
+                await refreshDashboard();
+                showToast(wasSigningIn ? "Welcome back!" : `Your ${role} account is ready.`);
+            } catch (error) {
+                document.getElementById("auth-status").textContent = error.message;
+            } finally {
+                document.getElementById("auth-submit").disabled = false;
+            }
         });
         document.getElementById("switch-dashboard").addEventListener("click", () => {
-            const isTeacher = document.getElementById("teacher-dashboard-content").hidden === false;
-            setDashboardRole(isTeacher ? "student" : "teacher", document.getElementById("profile-name").textContent);
+            document.getElementById("open-signup").click();
         });
 
         document.querySelectorAll("[data-toast]").forEach((link) => {
@@ -1155,21 +1562,33 @@
                 signupBackdrop.classList.remove("open");
                 joinClassBackdrop.classList.remove("open");
                 createClassBackdrop.classList.remove("open");
+                studentQuizBackdrop.classList.remove("open");
                 document.getElementById("teacher-task-backdrop").classList.remove("open");
                 search.classList.remove("open");
             }
         });
-        renderJoinedClassrooms();
+        initializeBackend();
         document.querySelectorAll(".answer").forEach((answer) => {
-            answer.addEventListener("click", () => {
+            answer.addEventListener("click", async () => {
                 const note = document.getElementById("quiz-note");
                 document.querySelectorAll(".answer").forEach((button) => button.classList.remove("correct", "incorrect"));
                 if (answer.dataset.correct) {
                     answer.classList.add("correct");
-                    note.textContent = "Nice work! 24 × 6 = 144. You earned 30 XP! ⭐";
-                    const xpTotal = document.getElementById("xp-total");
-                    xpTotal.textContent = (Number(xpTotal.textContent.replace(",", "")) + 30).toLocaleString("en-US");
-                    document.querySelectorAll(".answer").forEach((button) => { button.disabled = true; });
+                    answer.disabled = true;
+                    try {
+                        const result = await apiRequest("/api/games/math-dragon/answer", {
+                            method: "POST",
+                            body: { answer: Number(answer.textContent) }
+                        });
+                        note.textContent = result.correct
+                            ? `Nice work! You earned ${result.pointsAwarded} points! ⭐`
+                            : "That answer isn't quite right.";
+                        if (result.correct) await refreshDashboard();
+                        if (result.correct) document.querySelectorAll(".answer").forEach((button) => { button.disabled = true; });
+                    } catch (error) {
+                        note.textContent = error.message;
+                        if (!currentUser) answer.disabled = false;
+                    }
                 } else {
                     answer.classList.add("incorrect");
                     note.textContent = "Not quite. Try multiplying 24 by 3, then double it!";
